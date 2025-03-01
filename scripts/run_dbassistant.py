@@ -7,6 +7,11 @@ from modules.db_tools import *
 from modules.llm_utils import *  
 
 def run_assistant():
+    """Run the database assistant in an interactive loop.
+    
+    This function initializes the assistant with the necessary tools and configuration,
+    then enters an interactive loop where the user can input messages and receive responses.
+    """
     toolkit = get_db_toolkit()
     builtin_tools = [{'type': 'code_interpreter'}]
     
