@@ -5,9 +5,10 @@ import pandas as pd
 
 dotenv.load_dotenv()
 
+
 def get_engine():
     db_uri = os.getenv("DB_URI")
-    try: 
+    try:
         return create_engine(db_uri)
     except Exception as e:
         print(f"Error connecting to database: {e}")

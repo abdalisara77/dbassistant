@@ -1,7 +1,7 @@
-import os
 import json
 import inspect
 from typing import get_type_hints
+
 
 def get_type_info(param, type_hints):
     """Helper function to determine parameter type information"""
@@ -19,37 +19,35 @@ def get_type_info(param, type_hints):
             return {"type": "object"}
         elif typ == list:
             return {"type": "array"}
-    return {"type": "string"}  # default to string if type not specified
+    return {"type": "string"}
+
 
 def func_to_json(func, description=None):
     """Convert a function to a JSON function schema.
-    
+
     Args:
         func: The function to convert
         description: Optional description of what the function does
-    
+
     Returns:
         str: JSON string representing the function schema
     """
     sig = inspect.signature(func)
     type_hints = get_type_hints(func)
-    
+
     properties = {}
     required = []
-    
+
     for name, param in sig.parameters.items():
         if param.kind in (param.VAR_POSITIONAL, param.VAR_KEYWORD):
             continue
-            
+
         type_info = get_type_info(param, type_hints)
-        properties[name] = {
-            **type_info,
-            "description": name
-        }
-        
+        properties[name] = {**type_info, "description": name}
+
         if param.default == param.empty:
             required.append(name)
-    
+
     schema = {
         "type": "function",
         "function": {
@@ -59,21 +57,21 @@ def func_to_json(func, description=None):
                 "type": "object",
                 "properties": properties,
                 "required": required,
-                "additionalProperties": False
+                "additionalProperties": False,
             },
-            "strict": True
-        }
+            "strict": True,
+        },
     }
-    
+
     return schema
 
 
 def encode_func_call_result(result):
     """Encode a function call result into a JSON string.
-    
+
     Args:
         result: The result to encode
-    
+
     Returns:
         str: JSON string representing the function call result
     """
@@ -83,11 +81,11 @@ def encode_func_call_result(result):
         return json_result
     except (TypeError, OverflowError):
         # If the result is not JSON serializable (like a DataFrame)
-        if hasattr(result, 'to_json'):
+        if hasattr(result, "to_json"):
             # If it has a to_json method (like pandas DataFrame)
             json_result = result.to_json(orient="records")
             return json_result
-        elif hasattr(result, '__dict__'):
+        elif hasattr(result, "__dict__"):
             # For custom objects, try to serialize their __dict__
             json_result = json.dumps(result.__dict__)
             return json_result
@@ -99,7 +97,7 @@ def encode_func_call_result(result):
 
 def invoke_tool_for_llm(func, args):
     """Invoke a function and return the result as a JSON string.
-    
+
     Args:
         func: The function to invoke
         args: Arguments to pass to the function
@@ -108,3 +106,14 @@ def invoke_tool_for_llm(func, args):
     result = func(**args_dict)
     return result
 
+def create_context_for_tables(tables):
+    context = ""
+    for table in tables:
+        schema = table.split(".")[0]
+        # read the schema context from context_files
+        schema_file = f"context_files/{schema}.txt"
+        with open(schema_file, "r") as f:
+            schema_context = f.read()
+        context = context + schema_context
+
+    return context

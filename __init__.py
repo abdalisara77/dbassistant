@@ -5,4 +5,4 @@ This package provides tools for interacting with databases using OpenAI assistan
 """
 
 # Version of the dbassistant package
-__version__ = "0.1.0" 
+__version__ = "0.1.0"

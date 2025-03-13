@@ -1,1 +1,1 @@
-- some of the columns in the table have NaN values. You should handle these values appropriately (e.g exclude them from the results, or replace them with a default value)
+- some of the columns in this schema have NaN values. You should handle these values appropriately (e.g exclude them from the results, or replace them with a default value)
