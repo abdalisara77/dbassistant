@@ -3,6 +3,7 @@ from openai import OpenAI
 import json
 from modules.baseAssistant import BaseAssistant, baseAssistantEventHandler, client
 from modules.dbAssistant import dbAssistantEventHandler
+from modules.dbThread import dbThread
 from modules.db_tools import * 
 from modules.llm_utils import *  
 
@@ -25,10 +26,11 @@ def run_assistant():
     )
     
     dbexpert = assistant.create_assistant()
-    thread = client.beta.threads.create()
+    dbthread = dbThread(tool_resources=None)
+    thread = dbthread.create_db_thread()
 
     while True:
-        message = input("You: ")
+        message = input("\n You: ")
         if message == "exit":
             break
             
@@ -38,7 +40,7 @@ def run_assistant():
             content=message
         )
         
-        dbeh = dbAssistantEventHandler(tool_dict=toolkit, name='Data Expert')
+        dbeh = dbAssistantEventHandler(tool_dict=toolkit, name='Data Expert', thread_obj=dbthread)
         
         with client.beta.threads.runs.stream(
             thread_id=thread.id,

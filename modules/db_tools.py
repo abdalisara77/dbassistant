@@ -2,15 +2,16 @@ from sqlalchemy import create_engine, inspect, text
 import pandas as pd
 import json 
 from .db_utils import get_engine
+from .comms import get_user_approval
 
-__all__ = ["fetch_data_from_db", "get_all_tables_in_schema", "get_table_columns", "get_db_toolkit"]
-
+__all__ = ["fetch_data_from_db", "get_all_schemata", "get_table_columns", "get_db_toolkit", "confirm_add_tables"]
 
 def get_db_toolkit():
     return {
-        "get_all_tables_in_schema": get_all_tables_in_schema,
+        "get_all_schemata": get_all_schemata,
         "get_table_columns": get_table_columns,
         "fetch_data_from_db": fetch_data_from_db,
+        "confirm_add_tables": confirm_add_tables
     }
 
 
@@ -46,7 +47,7 @@ def fetch_data_from_db(query: str, table_name: str, schema: str):
         return f"Error: {e}"
     
 
-def get_all_tables_in_schema(schema: str):
+def get_all_schemata():
     """Retrieves all table names from a specified schema.
     
     Args:
@@ -63,17 +64,27 @@ def get_all_tables_in_schema(schema: str):
         return "Error: Unable to connect to the database"
     
     try:
-        query = f"SELECT table_name FROM information_schema.tables WHERE table_schema = '{schema}'"
-        
+        query = """
+            SELECT 
+                table_schema AS schema_name,
+                table_name,
+                column_name,
+                data_type
+            FROM 
+                INFORMATION_SCHEMA.COLUMNS
+            WHERE 
+                table_schema NOT IN ('pg_catalog', 'pg_toast', 'information_schema')
+            ORDER BY 
+            table_schema, 
+            table_name, 
+            ordinal_position;
+        """
         df = pd.read_sql(text(query), engine)
-        
-        if df.empty:
-            return "No tables found"
-        else:
-            return df.to_json(orient="records"), "Tables fetched successfully"
-        
+        return df.to_json(orient="records")
     except Exception as e:
         return f"Error: {e}"
+    
+    
     
 
 def get_table_columns(table_name: str, schema: str):
@@ -105,6 +116,21 @@ def get_table_columns(table_name: str, schema: str):
         
     except Exception as e:
         return f"Error: {e}"
-    
 
+
+def confirm_add_tables(table_names: str):
+    """Verifies that the table names are valid and exist in the database.
+    
+    Args:
+        table_names (list[str]): List of table names
+        
+    Returns:
+        str: User approval message along with neccessary context for the agent or feedback for the agent
+        
+    Raises:
+        Exception: If database connection fails or query execution fails
+    """
+    rsp, feedback = get_user_approval(table_names) 
+    return rsp, feedback
+        
 

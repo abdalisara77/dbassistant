@@ -4,16 +4,18 @@ from openai import OpenAI
 import time
 import json
 from .baseAssistant import BaseAssistant, baseAssistantEventHandler, client
+from .dbThread import dbThread
 from typing_extensions import override  
 from .db_tools import *
 from .llm_utils import * 
 import pandas as pd
 
 class dbAssistantEventHandler(baseAssistantEventHandler):
-    def __init__(self, tool_dict, name):
+    def __init__(self, tool_dict, name, thread_obj):
         super().__init__(tool_dict, name)
-        self.name = name
-        self.toolkit = tool_dict
+        self.name       = name
+        self.toolkit    = tool_dict
+        self.thread_obj = thread_obj
     
     @override
     def handle_requires_action(self, data, run_id):
@@ -25,7 +27,8 @@ class dbAssistantEventHandler(baseAssistantEventHandler):
             
             if function_name in toolkit.keys():
                 try:
-                    result = invoke_tool_for_llm(toolkit[function_name], function_args)
+                    #change this to invoke them via thread 
+                    result = self.thread_obj.invoke_function(toolkit[function_name], function_args)
                     if function_name == "fetch_data_from_db": 
                         try:
                             data, msg = result
@@ -65,7 +68,7 @@ class dbAssistantEventHandler(baseAssistantEventHandler):
 
     @override
     def submit_tool_outputs(self, tool_outputs, run_id):
-        curr_event_handler = dbAssistantEventHandler(self.toolkit, self.name)
+        curr_event_handler = dbAssistantEventHandler(self.toolkit, self.name, self.thread_obj)
         try:
             with client.beta.threads.runs.submit_tool_outputs_stream(
                 thread_id=self.current_run.thread_id,
