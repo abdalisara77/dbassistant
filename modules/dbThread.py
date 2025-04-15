@@ -3,7 +3,7 @@ from openai import OpenAI
 import json
 import pandas as pd
 from dotenv import load_dotenv
-from .llm_utils import create_context_for_tables
+from .context_utils import get_context_for_schemata
 from .db_tools import confirm_add_tables
 
 
@@ -43,9 +43,8 @@ class dbThread:
             if rsp == "success" or rsp == "modified":
                 print(f"Adding tables: {tables.split(',')} to thread")
                 self.add_tables_to_thread(tables.split(","))
-                context = create_context_for_tables(tables.split(","))
+                context = get_context_for_schemata([table.split(".")[0] for table in tables.split(",")])
                 return "tables successfully added" + context
-
             else:
                 return tables
         else:

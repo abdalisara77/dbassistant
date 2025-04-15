@@ -36,3 +36,8 @@ downloads/
 
 # Temporary files
 temp.csv
+
+# Context files - track folder but not contents
+context_files/*
+!context_files/.gitkeep
+

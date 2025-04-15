@@ -24,11 +24,15 @@ class dbAssistantEventHandler(baseAssistantEventHandler):
 
             if function_name in toolkit.keys():
                 try:
+                    print(f"Invoking function: {function_name} with args: {function_args}")
                     # change this to invoke them via thread
+                    print(self.thread_obj)
                     result = self.thread_obj.invoke_function(
                         toolkit[function_name], function_args
                     )
+
                     if function_name == "fetch_data_from_db":
+                        
                         try:
                             data, msg = result
                             print(data)

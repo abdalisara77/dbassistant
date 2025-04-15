@@ -106,14 +106,3 @@ def invoke_tool_for_llm(func, args):
     result = func(**args_dict)
     return result
 
-def create_context_for_tables(tables):
-    context = ""
-    for table in tables:
-        schema = table.split(".")[0]
-        # read the schema context from context_files
-        schema_file = f"context_files/{schema}.txt"
-        with open(schema_file, "r") as f:
-            schema_context = f.read()
-        context = context + schema_context
-
-    return context
