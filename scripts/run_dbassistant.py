@@ -1,6 +1,6 @@
-from modules.baseAssistant import BaseAssistant, client
+from modules.base_assistant import BaseAssistant, client
 from modules.converse import Converse
-from modules.dbThread import dbThread
+from modules.db_thread import DbThread
 from modules.db_tools import get_db_toolkit
 from modules.context_utils import get_dbassistant_context_toolkit
 
@@ -22,7 +22,7 @@ def run_assistant():
         tool_resources=None,
     )
 
-    dbthread = dbThread(tool_resources=None)
+    dbthread = DbThread(tool_resources=None)
     dbthread.create_db_thread()
 
     conversation = Converse(assistant, dbthread)

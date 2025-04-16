@@ -12,7 +12,7 @@ openai_api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=openai_api_key)
 
 
-class dbThread:
+class DbThread:
     def __init__(self, tool_resources):
         self.tool_resources = tool_resources
         self.thread_id = None

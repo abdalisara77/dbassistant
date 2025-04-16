@@ -1,13 +1,13 @@
 import json
-from .baseAssistant import baseAssistantEventHandler, client
-from .dbThread import dbThread
+from .base_assistant import BaseAssistantEventHandler, client
+from .db_thread import DbThread
 from typing_extensions import override
 from .db_tools import *
 from .llm_utils import *
 import pandas as pd
 
 
-class dbAssistantEventHandler(baseAssistantEventHandler):
+class DbAssistantEventHandler(BaseAssistantEventHandler):
     def __init__(self, tool_dict, name, thread_obj):
         super().__init__(tool_dict, name)
         self.name = name
@@ -120,7 +120,7 @@ class dbAssistantEventHandler(baseAssistantEventHandler):
 
     @override
     def submit_tool_outputs(self, tool_outputs, run_id):
-        curr_event_handler = dbAssistantEventHandler(
+        curr_event_handler = DbAssistantEventHandler(
             self.toolkit, self.name, self.thread_obj
         )
         try:

@@ -1,6 +1,6 @@
-from modules.baseAssistant import client, BaseAssistant
-from modules.dbAssistant import dbAssistantEventHandler
-from modules.dbThread import dbThread
+from modules.base_assistant import client, BaseAssistant
+from modules.db_assistant import DbAssistantEventHandler
+from modules.db_thread import DbThread
 
 
 class Converse:
@@ -26,7 +26,7 @@ class Converse:
                 thread_id=self.thread.thread_id, role="user", content=message
             )
 
-            dbeh = dbAssistantEventHandler(
+            dbeh = DbAssistantEventHandler(
                 tool_dict=self.assistant.tools, name=self.assistant.name, thread_obj=self.thread
             )
 

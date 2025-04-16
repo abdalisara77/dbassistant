@@ -84,7 +84,7 @@ class BaseAssistant:
             raise
 
 
-class baseAssistantEventHandler(AssistantEventHandler):
+class BaseAssistantEventHandler(AssistantEventHandler):
     """Event handler for OpenAI assistant interactions.
 
     This class handles events from the OpenAI assistant API, including
@@ -191,7 +191,7 @@ class baseAssistantEventHandler(AssistantEventHandler):
             tool_outputs (list): List of tool outputs to submit.
             run_id (str): The ID of the current run.
         """
-        curr_event_handler = baseAssistantEventHandler(self.toolkit, self.name)
+        curr_event_handler = BaseAssistantEventHandler(self.toolkit, self.name)
 
         try:
             with client.beta.threads.runs.submit_tool_outputs_stream(
