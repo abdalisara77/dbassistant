@@ -23,7 +23,19 @@ A database assistant powered by OpenAI that helps you interact with your databas
 
 ## Usage
 
-You can run the assistant in two ways:
+### Important: First-time Setup
+
+When setting up the tool for the first time with a new database, you should run the Database Explorer first. This tool will explore your database schema and create the necessary context files for the assistant to work properly:
+
+```
+python -m scripts.run_dbexplorer
+```
+
+The Database Explorer will analyze your database structure and generate helpful context for the assistant, including table summaries and relationships.
+
+### Running the Database Assistant
+
+After running the Database Explorer, you can run the assistant in two ways:
 
 1. Using the entry point script:
    ```
@@ -32,7 +44,7 @@ You can run the assistant in two ways:
 
 2. As a module:
    ```
-   python -m dbassistant.scripts.run_dbassistant
+   python -m scripts.run_dbassistant
    ```
 
 ## Features
