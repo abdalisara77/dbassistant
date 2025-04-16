@@ -39,7 +39,6 @@ class dbThread:
         args_dict = json.loads(args)
         if func.__name__ == "confirm_add_tables":
             rsp, tables = confirm_add_tables(**args_dict)
-            print(rsp, tables)
             if rsp == "success" or rsp == "modified":
                 print(f"Adding tables: {tables.split(',')} to thread")
                 self.add_tables_to_thread(tables.split(","))

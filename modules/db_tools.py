@@ -43,12 +43,10 @@ def fetch_data_from_db(query: str, table_name: str, schema: str):
     try:
         # Clean up the query and ensure it's a proper SELECT
         df = pd.read_sql(text(query), engine)
-        print(df)
         if df.empty:
             return "No data found"
         else:
             # Convert DataFrame to JSON string to make it serializable
-            print(df)
             return df, "Data fetched successfully"
 
     except Exception as e:
@@ -88,7 +86,6 @@ def get_all_schemata():
             ordinal_position;
         """
         df = pd.read_sql(text(query), engine)
-        print(df)
         return df.to_json(orient="records")
     except Exception as e:
         return f"Error: {e}"
@@ -135,23 +132,15 @@ def get_table_columns_fks(table_name: str, schema: str):
 
         df_columns = pd.read_sql(text(column_query), engine)
         df_fks = pd.read_sql(text(fk_query), engine)
-        print(df_columns)
-        print(df_fks)
         if df_columns.empty:
             return "No schema found"
         else:
-            # Combine both dataframes into a single JSON object
-            print(json.dumps({
-                "columns": json.loads(df_columns.to_json(orient="records")),
-                "foreign_keys": json.loads(df_fks.to_json(orient="records"))
-            }))
             return json.dumps({
                 "columns": json.loads(df_columns.to_json(orient="records")),
                 "foreign_keys": json.loads(df_fks.to_json(orient="records"))
             })
 
     except Exception as e:
-        print(f"Error: {e}")
         return f"Error: {e}"
 
 

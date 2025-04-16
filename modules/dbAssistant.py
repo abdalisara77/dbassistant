@@ -24,9 +24,6 @@ class dbAssistantEventHandler(baseAssistantEventHandler):
 
             if function_name in toolkit.keys():
                 try:
-                    print(f"Invoking function: {function_name} with args: {function_args}")
-                    # change this to invoke them via thread
-                    print(self.thread_obj)
                     result = self.thread_obj.invoke_function(
                         toolkit[function_name], function_args
                     )
@@ -35,7 +32,6 @@ class dbAssistantEventHandler(baseAssistantEventHandler):
                         
                         try:
                             data, msg = result
-                            print(data)
                             # Check if data is a DataFrame and convert it to CSV for file creation
                             if isinstance(data, pd.DataFrame):
                                 try:

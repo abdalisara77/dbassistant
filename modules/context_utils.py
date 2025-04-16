@@ -5,6 +5,7 @@ def get_dbexplorer_context_toolkit():
         "get_context_for_schemata": get_context_for_schemata,
         "create_context_file": create_context_file,
         "add_context_to_file": add_context_to_file,
+        "add_schema_one_liners": add_schema_one_liners
     }
 
 
@@ -38,5 +39,10 @@ def add_context_to_file(schema: str, context: str):
         f.write(context)
     return
 
+
+def add_schema_one_liners(oneliner: str):
+    with open(f"instructions/db_assistant_instructs.txt", "a") as f:
+        f.write(oneliner)
+    return
 
 

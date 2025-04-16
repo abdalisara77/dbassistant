@@ -1,4 +1,4 @@
-from modules.baseAssistant import BaseAssistant, client
+from modules.baseAssistant import BaseAssistant
 from modules.converse import Converse
 from modules.dbThread import dbThread
 from modules.db_tools import get_db_toolkit
@@ -20,7 +20,7 @@ def run_dbexplorer():
         instruct_file="instructions/db_explorer_instructs.txt",
         tools= db_toolkit | context_toolkit,
         builtin_tools=[],
-        model="gpt-4o",
+        model="gpt-4.1",
         tool_resources=None,
     )
 

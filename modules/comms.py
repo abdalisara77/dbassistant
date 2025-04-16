@@ -15,8 +15,6 @@ def get_user_approval(table_names: str):
         response (str): 'y' if approved, 'n' if not approved, 'm' if modified
         feedback (str): Feedback message from the user
     """
-    print("inside get_user_approval")
-    print(table_names)
     while True:
         print(
             f"The following tables will be added to the thread's memory: {table_names}"
