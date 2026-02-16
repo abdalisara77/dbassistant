@@ -20,7 +20,7 @@ Upon connecting to a database, DBAssistant performs an automated analysis that i
 
 ### Phase 2: Handling User Requests
 
-![DBAssistant workflow diagram](/images/dbdiag.svg)
+![DBAssistant workflow diagram](/dbdiag.svg)
 
 When a user submits a query, DBAssistant follows a structured, collaborative process:
 
